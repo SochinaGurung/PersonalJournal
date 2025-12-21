@@ -1,0 +1,70 @@
+﻿@page "/login"
+@inject NavigationManager Navigation
+
+<div class="login-page">
+    <div class="login-card">
+
+        <!-- Header -->
+        <div class="login-header">
+            <div class="logo-icon">📓</div>
+            <h2>My Journal</h2>
+            <p class="welcome-text">Welcome back 💗</p>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username"
+                   type="text"
+                   placeholder="Enter your username" />
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password"
+                   type="@PasswordInputType"
+                   placeholder="Enter your password" />
+
+            <div class="password-row">
+                <label class="show-password">
+                    <input type="checkbox" @bind="ShowPassword" />
+                    <span>Show password</span>
+                </label>
+
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+        </div>
+
+        <!-- Login Button -->
+        <button class="login-btn" @onclick="GoToDashboard">
+            Login
+        </button>
+
+        <!-- Register -->
+        <p class="register-text">
+            Don’t have an account?
+            <NavLink href="/register">Register</NavLink>
+        </p>
+
+        <!-- Footer -->
+        <div class="login-footer">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">About</a>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private bool ShowPassword = false;
+
+    private string PasswordInputType =>
+        ShowPassword ? "text" : "password";
+
+    private void GoToDashboard()
+    {
+        Navigation.NavigateTo("/dashboard");
+    }
+}

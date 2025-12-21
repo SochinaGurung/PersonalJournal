@@ -1,0 +1,135 @@
+/* Page background */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fde2e4, #f8edeb);
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Card */
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.login-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.logo-icon {
+    font-size: 40px;
+    margin-bottom: 6px;
+}
+
+.login-header h2 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.welcome-text {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 18px;
+}
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e56b9f;
+        }
+
+/* Password row */
+.password-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.show-password {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.forgot-link {
+    font-size: 13px;
+    color: #e56b9f;
+    text-decoration: none;
+}
+
+    .forgot-link:hover {
+        text-decoration: underline;
+    }
+
+/* Login button */
+.login-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #e56b9f;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+    .login-btn:hover {
+        background: #d65a8a;
+    }
+
+/* Register text */
+.register-text {
+    margin-top: 18px;
+    font-size: 14px;
+    text-align: center;
+}
+
+    .register-text a {
+        color: #e56b9f;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+/* Footer */
+.login-footer {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-size: 12px;
+}
+
+    .login-footer a {
+        color: #999;
+        text-decoration: none;
+    }

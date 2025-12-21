@@ -1,0 +1,60 @@
+﻿@page "/register"
+
+<div class="register-page">
+
+    <!-- Top Navigation -->
+    <div class="top-bar">
+        <div class="brand">
+            <span class="brand-icon">📓</span>
+            <span class="brand-text">My Journal</span>
+        </div>
+
+        <NavLink href="/" class="back-home">
+            ← Back to Home
+        </NavLink>
+    </div>
+
+    <!-- Register Card -->
+    <div class="register-card">
+        <h2>Register</h2>
+        <p class="subtitle">Create your account to start journaling 💗</p>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" type="text" placeholder="Choose a username" />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" placeholder="name@example.com" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Create a password" />
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input id="confirmPassword" type="password" placeholder="Repeat your password" />
+        </div>
+
+        <div class="terms">
+            <input type="checkbox" id="terms" />
+
+            <label for="terms">
+                I agree with the
+                <a href="#">Terms & Conditions</a>
+            </label>
+        </div>
+
+        <button class="register-btn">Register</button>
+
+        <p class="login-text">
+            Already have an account?
+            <NavLink href="/login" class="login-link">
+                Login
+            </NavLink>
+        </p>
+    </div>
+</div>

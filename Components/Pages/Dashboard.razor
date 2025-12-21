@@ -1,0 +1,129 @@
+﻿@page "/dashboard"
+@inject NavigationManager Navigation
+
+
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="user-profile">
+            <!-- <img src="https://via.placeholder.com/48" alt="User" /> -->
+            <div>
+                <h4>Hello, Sarah!</h4>
+                <span class="plan">Free Plan Member</span>
+            </div>
+        </div>
+
+        
+
+        <nav class="menu">
+            <a class="active">Dashboard</a>
+            <a>Calendar View</a>
+            <a>Journal List</a>
+            <a>Favorites</a>
+            <a>Settings</a>
+        </nav>
+        <button class="new-entry-btn" @onclick="GoToJournal">
+            ＋ New Entry
+        </button>
+        <p class="version">v1.2.0 · Made with 💗</p>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="top-header">
+            <div>
+                <h1>My Journal Dashboard</h1>
+                <p>Your journaling insights at a glance 💗</p>
+            </div>
+            <span class="date">Today: Oct 24, 2023</span>
+        </header>
+
+        <!-- Stats -->
+        <section class="stats">
+            <div class="stat-card">
+                <span class="icon">🔥</span>
+                <p class="label">Streak</p>
+                <h2>7 Days</h2>
+                <small>You’re on fire!</small>
+            </div>
+
+            <div class="stat-card">
+                <span class="icon">🏆</span>
+                <p class="label">Record</p>
+                <h2>24 Days</h2>
+                <small>Keep pushing!</small>
+            </div>
+
+            <div class="stat-card">
+                <span class="icon">⏰</span>
+                <p class="label">Missed</p>
+                <h2>2 Days</h2>
+                <small>Don’t worry, it happens!</small>
+            </div>
+        </section>
+
+        <!-- Analytics -->
+        <section class="analytics">
+            <div class="card">
+                <h3>Mood Distribution</h3>
+                <p class="sub">Last 30 Days</p>
+
+                <!-- Placeholder for chart -->
+                <div class="donut">
+                    <span>Mostly Happy 😊</span>
+                </div>
+
+                <ul class="legend">
+                    <li><span class="happy"></span> Happy 45%</li>
+                    <li><span class="neutral"></span> Neutral 25%</li>
+                    <li><span class="excited"></span> Excited 15%</li>
+                    <li><span class="other"></span> Other 15%</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Top Tags</h3>
+
+                <div class="tag">
+                    <span>#Gratitude</span>
+                    <span>24 entries</span>
+                </div>
+                <div class="bar pink"></div>
+
+                <div class="tag">
+                    <span>#Productivity</span>
+                    <span>18 entries</span>
+                </div>
+                <div class="bar blue"></div>
+
+                <div class="tag">
+                    <span>#SelfCare</span>
+                    <span>12 entries</span>
+                </div>
+                <div class="bar green"></div>
+            </div>
+        </section>
+
+        <!-- Word Count -->
+        <section class="card wide">
+            <h3>Word Count Trends</h3>
+            <p class="sub">Average: 350 words per entry</p>
+
+            <!-- Chart placeholder -->
+            <div class="line-chart">
+                <span>📈 Chart Placeholder</span>
+            </div>
+        </section>
+
+    </main>
+</div>
+@code {
+   
+    private void GoToJournal()
+    {
+        Navigation.NavigateTo("/journal");
+    }
+}

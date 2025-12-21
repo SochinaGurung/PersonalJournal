@@ -1,0 +1,112 @@
+﻿@page "/journal"
+
+<div class="page">
+
+    <!-- Header -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">📕</div>
+            <span>My Journal</span>
+        </div>
+
+        <div class="header-right">
+            <span class="date">Saturday, December 20, 2025</span>
+            <img class="avatar" src="https://i.pravatar.cc/40" />
+        </div>
+    </header>
+
+    <!-- Title -->
+    <section class="page-title">
+        <div>
+            <h1>Today’s Journal</h1>
+            <p>Write your thoughts for the day 💗</p>
+        </div>
+        <span class="status">✔ Saved locally</span>
+    </section>
+
+    <!-- Content -->
+    <main class="layout">
+
+        <!-- Editor -->
+        <section class="editor">
+            <div class="toolbar">
+                <span>B</span>
+                <span>I</span>
+                <span>U</span>
+                <span>T</span>
+                <span>≡</span>
+                <span>🔗</span>
+                <span>🖼</span>
+
+                <div class="toggle">
+                    <span>MD</span>
+                    <div class="switch"></div>
+                    <span>PREVIEW</span>
+                </div>
+            </div>
+
+            <input class="title-input" placeholder="Title of your entry..." />
+
+            <textarea class="editor-body"
+                      placeholder="Start writing your story here... what made you smile today?"></textarea>
+
+            <div class="editor-footer">
+                <span>Words: 0</span>
+                <span>Markdown Supported</span>
+            </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <!-- Mood -->
+            <div class="card">
+                <h3>😊 How are you feeling?</h3>
+
+                <p class="label">PRIMARY MOOD *</p>
+                <div class="moods">
+                    <button>😊<span>Positive</span></button>
+                    <button>😐<span>Neutral</span></button>
+                    <button>😔<span>Negative</span></button>
+                </div>
+
+                <p class="label">SECONDARY (MAX 2)</p>
+                <div class="chips">
+                    <span>Productive</span>
+                    <span>Tired</span>
+                    <span>Grateful</span>
+                    <span>Anxious</span>
+                    <span>Hopeful</span>
+                </div>
+            </div>
+
+            <!-- Meta -->
+            <div class="card">
+                <p class="label">CATEGORY</p>
+                <select>
+                    <option>Personal Journal</option>
+                </select>
+
+                <p class="label">TAGS</p>
+                <div class="tagbox">
+                    <span class="tag">#weekend ✕</span>
+                    <input placeholder="Add tag..." />
+                </div>
+
+                <div class="meta">
+                    <div><span>Created At</span><span>Oct 24, 2023 • 10:45 AM</span></div>
+                    <div><span>Updated At</span><span>Just now</span></div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <button class="save">💾 Save Entry</button>
+            <div class="actions">
+                <button class="update">Update</button>
+                <button class="delete">Delete</button>
+            </div>
+
+        </aside>
+
+    </main>
+</div>
