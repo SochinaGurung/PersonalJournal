@@ -8,47 +8,23 @@
 /* Sidebar */
 .sidebar {
     width: 260px;
-    background: #ffffff;
+    background: white;
     padding: 20px;
     display: flex;
     flex-direction: column;
 }
 
 .user-profile {
-    display: flex;
-    gap: 12px;
-    align-items: center;
     margin-bottom: 20px;
 }
-
-    .user-profile img {
-        border-radius: 50%;
-    }
 
 .plan {
     font-size: 12px;
     color: #888;
 }
 
-/* Credentials */
-.user-credentials label {
-    font-size: 12px;
-    color: #555;
-    margin-top: 10px;
-    display: block;
-}
-
-.user-credentials input {
-    width: 100%;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid #eee;
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
 /* Menu */
-.menu a {
+.menu .nav-link {
     display: block;
     padding: 10px 12px;
     border-radius: 12px;
@@ -57,20 +33,32 @@
     text-decoration: none;
 }
 
-    .menu a.active {
-        background: #ffe3ea;
-        color: #ff4f7a;
-        font-weight: 600;
-    }
+.menu .nav-link.active {
+    background: #ffe3ea;
+    color: #ff4f7a;
+    font-weight: 600;
+}
+
+.new-entry-btn,
+.logout-btn {
+    border-radius: 20px;
+    padding: 10px;
+    font-weight: 500;
+    cursor: pointer;
+}
 
 .new-entry-btn {
-    margin-top: auto;
     background: #ff4f7a;
     color: white;
     border: none;
-    border-radius: 20px;
-    padding: 10px;
-    cursor: pointer;
+    margin-top: auto;
+}
+
+.logout-btn {
+    margin-top: 10px;
+    background: white;
+    color: #ff4f7a;
+    border: 2px solid #ff4f7a;
 }
 
 .version {
@@ -99,12 +87,22 @@
     font-size: 12px;
 }
 
+/* Filter */
+.filter {
+    margin: 20px 0;
+}
+
+.filter select {
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
 /* Stats */
 .stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    margin: 25px 0;
 }
 
 .stat-card {
@@ -128,6 +126,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    margin-top: 20px;
 }
 
 .card {
@@ -137,24 +136,25 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
-    .card.wide {
-        margin-top: 20px;
-    }
+.card.wide {
+    margin-top: 20px;
+}
 
 .sub {
     font-size: 13px;
     color: #999;
 }
 
-/* Donut placeholder */
-.donut {
+/* Charts placeholders */
+.donut,
+.line-chart {
     height: 140px;
-    border-radius: 50%;
     background: #ffe3ea;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px auto;
+    margin: 16px 0;
 }
 
 /* Legend */
@@ -164,29 +164,17 @@
     font-size: 13px;
 }
 
-    .legend span {
-        width: 10px;
-        height: 10px;
-        display: inline-block;
-        border-radius: 50%;
-        margin-right: 6px;
-    }
-
-.happy {
-    background: #ff4f7a;
+.legend span {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 6px;
 }
 
-.neutral {
-    background: #ffc107;
-}
-
-.excited {
-    background: #9b5cff;
-}
-
-.other {
-    background: #ddd;
-}
+.happy { background: #ff4f7a; }
+.neutral { background: #ffc107; }
+.other { background: #ddd; }
 
 /* Tags */
 .tag {
@@ -199,30 +187,4 @@
     height: 6px;
     border-radius: 6px;
     margin: 6px 0 14px;
-}
-
-    .bar.pink {
-        width: 80%;
-        background: #ff4f7a;
-    }
-
-    .bar.blue {
-        width: 60%;
-        background: #5a9cff;
-    }
-
-    .bar.green {
-        width: 45%;
-        background: #4cd964;
-    }
-
-/* Line chart placeholder */
-.line-chart {
-    height: 140px;
-    background: #ffe3ea;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ff4f7a;
 }
