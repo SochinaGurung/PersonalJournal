@@ -1,0 +1,139 @@
+@page "/settings"
+@inject NavigationManager Navigation
+@inject Coursework.Services.ThemeService ThemeService
+@inject Coursework.Services.PdfExportService PdfExportService
+@inject Coursework.Services.DatabaseService DatabaseService
+@inject IJSRuntime JS
+
+<div class="settings-page">
+    <header class="page-header">
+        <button class="back-dashboard-btn" @onclick="GoToDashboard">← Back to Dashboard</button>
+        <h1>Settings</h1>
+    </header>
+
+    <div class="settings-content">
+        <!-- Theme Settings -->
+        <div class="settings-section">
+            <h2>Appearance</h2>
+            <div class="setting-item">
+                <label>Theme</label>
+                <div class="theme-toggle">
+                    <button class="theme-btn @(ThemeService.CurrentTheme == "light" ? "active" : "")" 
+                            @onclick='@(() => ThemeService.SetTheme("light"))'>
+                        ☀️ Light
+                    </button>
+                    <button class="theme-btn @(ThemeService.CurrentTheme == "dark" ? "active" : "")" 
+                            @onclick='@(() => ThemeService.SetTheme("dark"))'>
+                        🌙 Dark
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Settings -->
+        <div class="settings-section">
+            <h2>Export</h2>
+            <div class="setting-item">
+                <label>Export Journal Entries to PDF</label>
+                <div class="export-controls">
+                    <div class="date-range">
+                        <label>Start Date:</label>
+                        <input type="date" @bind="ExportStartDate" />
+                    </div>
+                    <div class="date-range">
+                        <label>End Date:</label>
+                        <input type="date" @bind="ExportEndDate" />
+                    </div>
+                    <button class="export-btn" @onclick="ExportToPdf" disabled="@IsExporting">
+                        @(IsExporting ? "Exporting..." : "📄 Export to PDF")
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(ExportMessage))
+                {
+                    <div class="export-message @(ExportMessage.Contains("success") ? "success" : "error")">
+                        @ExportMessage
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-section">
+            <h2>Data</h2>
+            <div class="setting-item">
+                <p>Total Entries: @DatabaseService.GetTotalJournalEntries()</p>
+                <p>Database Location: @GetDatabasePath()</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DateTime ExportStartDate = DateTime.Now.AddDays(-30);
+    private DateTime ExportEndDate = DateTime.Now;
+    private bool IsExporting = false;
+    private string ExportMessage = "";
+
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += () => InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ExportToPdf()
+    {
+        if (ExportStartDate > ExportEndDate)
+        {
+            ExportMessage = "Error: Start date must be before end date";
+            StateHasChanged();
+            return;
+        }
+
+        IsExporting = true;
+        ExportMessage = "";
+        StateHasChanged();
+
+        try
+        {
+            var entries = DatabaseService.GetJournalEntriesByDateRange(ExportStartDate, ExportEndDate);
+            
+            if (entries.Count == 0)
+            {
+                ExportMessage = "No entries found for the selected date range.";
+                IsExporting = false;
+                StateHasChanged();
+                return;
+            }
+            
+            var html = PdfExportService.GenerateHtmlForPdfExport(entries, ExportStartDate, ExportEndDate);
+            
+            // Use JavaScript library (jsPDF) to generate PDF
+            var fileName = $"journal_export_{ExportStartDate:yyyyMMdd}_to_{ExportEndDate:yyyyMMdd}.pdf";
+            
+            await JS.InvokeVoidAsync("generatePdfFromHtml", html, fileName);
+            
+            ExportMessage = "Success! PDF exported successfully.";
+        }
+        catch (Exception ex)
+        {
+            ExportMessage = $"Error exporting: {ex.Message}";
+        }
+        finally
+        {
+            IsExporting = false;
+            StateHasChanged();
+        }
+    }
+
+    private string GetDatabasePath()
+    {
+        return Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "journal.db"
+        );
+    }
+
+    private void GoToDashboard()
+    {
+        Navigation.NavigateTo("/dashboard");
+    }
+}
