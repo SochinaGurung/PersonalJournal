@@ -107,6 +107,21 @@
         background: #d65a8a;
     }
 
+    .login-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+.error-message {
+    background: #ffe3ea;
+    color: #e11d48;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 /* Register text */
 .register-text {
     margin-top: 18px;

@@ -1,5 +1,7 @@
-﻿@page "/login"
+@page "/"
 @inject NavigationManager Navigation
+@inject Coursework.Services.DatabaseService DatabaseService
+@inject Coursework.Services.AuthenticationService AuthService
 
 <div class="login-page">
     <div class="login-card">
@@ -16,7 +18,8 @@
             <label for="username">Username</label>
             <input id="username"
                    type="text"
-                   placeholder="Enter your username" />
+                   placeholder="Enter your username"
+                   @bind="Username" />
         </div>
 
         <!-- Password -->
@@ -24,7 +27,8 @@
             <label for="password">Password</label>
             <input id="password"
                    type="@PasswordInputType"
-                   placeholder="Enter your password" />
+                   placeholder="Enter your password"
+                   @bind="Password" />
 
             <div class="password-row">
                 <label class="show-password">
@@ -36,9 +40,14 @@
             </div>
         </div>
 
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="error-message">@ErrorMessage</div>
+        }
+
         <!-- Login Button -->
-        <button class="login-btn" @onclick="GoToDashboard">
-            Login
+        <button class="login-btn" @onclick="HandleLogin" disabled="@IsLoggingIn">
+            @(IsLoggingIn ? "Logging in..." : "Login")
         </button>
 
         <!-- Register -->
@@ -59,12 +68,57 @@
 
 @code {
     private bool ShowPassword = false;
+    private string Username = "";
+    private string Password = "";
+    private bool IsLoggingIn = false;
+    private string ErrorMessage = "";
 
     private string PasswordInputType =>
         ShowPassword ? "text" : "password";
-
-    private void GoToDashboard()
+    
+    private string HashPassword(string password)
     {
-        Navigation.NavigateTo("/dashboard");
+        using (var sha256 = System.Security.Cryptography.SHA256.Create())
+        {
+            var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+    }
+
+    private void HandleLogin()
+    {
+        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+        {
+            ErrorMessage = "Please enter both username and password";
+            return;
+        }
+
+        IsLoggingIn = true;
+        ErrorMessage = "";
+
+        try
+        {
+            var passwordHash = HashPassword(Password);
+            var user = DatabaseService.GetUserByUsername(Username);
+            
+            if (user != null && user.PasswordHash == passwordHash)
+            {
+                AuthService.Login(user);
+                Navigation.NavigateTo("/dashboard");
+            }
+            else
+            {
+                ErrorMessage = "Invalid username or password";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An error occurred: " + ex.Message;
+        }
+        finally
+        {
+            IsLoggingIn = false;
+        }
     }
 }
