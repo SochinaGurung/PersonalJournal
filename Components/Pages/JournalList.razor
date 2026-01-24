@@ -1,0 +1,136 @@
+@page "/journal-list"
+@inject Coursework.Services.DatabaseService DatabaseService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<div class="journal-list-page">
+    <header class="page-header">
+        <div>
+            <button class="back-dashboard-btn" @onclick="GoToDashboard">← Back to Dashboard</button>
+            <h1>My Journal Entries</h1>
+            <p>All your journal entries in one place 💗</p>
+        </div>
+        <button class="new-entry-btn" @onclick="GoToNewJournal">＋ New Entry</button>
+    </header>
+
+    @if (JournalEntries.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <h2>No entries yet</h2>
+            <p>Start your journaling journey by creating your first entry!</p>
+            <button class="new-entry-btn" @onclick="GoToNewJournal">Create First Entry</button>
+        </div>
+    }
+    else
+    {
+        <div class="entries-grid">
+            @foreach (var entry in JournalEntries)
+            {
+                <div class="entry-card" @onclick="() => EditEntry(entry.Id)">
+                    <div class="entry-header">
+                        <h3>@entry.Title</h3>
+                        <div class="entry-actions">
+                            <button class="icon-btn" @onclick="() => ToggleFavorite(entry.Id)" @onclick:stopPropagation="true">
+                                @if (entry.IsFavorite)
+                                {
+                                    <span>⭐</span>
+                                }
+                                else
+                                {
+                                    <span>☆</span>
+                                }
+                            </button>
+                            <button class="icon-btn delete-btn" @onclick="() => DeleteEntry(entry.Id)" @onclick:stopPropagation="true">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="entry-content" @onclick:stopPropagation="true">
+                        @((MarkupString)GetPreview(entry.Content))
+                    </div>
+                    <div class="entry-footer">
+                        <span class="mood-badge">@GetMoodEmoji(entry.PrimaryMood) @entry.PrimaryMood</span>
+                        <span class="category">@entry.Category</span>
+                        <span class="date">@entry.CreatedAt.ToString("MMM dd, yyyy")</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(entry.Tags))
+                    {
+                        <div class="entry-tags">
+                            @foreach (var tag in entry.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                            {
+                                <span class="tag">#@tag</span>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Coursework.Models.JournalEntry> JournalEntries = new List<Coursework.Models.JournalEntry>();
+
+    protected override void OnInitialized()
+    {
+        LoadEntries();
+    }
+
+    private void LoadEntries()
+    {
+        JournalEntries = DatabaseService.GetAllJournalEntries();
+    }
+
+    private string GetPreview(string content)
+    {
+        if (string.IsNullOrEmpty(content)) return "";
+        
+        var plainText = System.Text.RegularExpressions.Regex.Replace(content, "<.*?>", " ");
+        var preview = plainText.Length > 150 ? plainText.Substring(0, 150) + "..." : plainText;
+        return preview;
+    }
+
+    private string GetMoodEmoji(string mood)
+    {
+        return mood.ToLower() switch
+        {
+            "positive" => "😊",
+            "neutral" => "😐",
+            "negative" => "😔",
+            _ => "📝"
+        };
+    }
+
+    private void EditEntry(int id)
+    {
+        Navigation.NavigateTo($"/journal?id={id}");
+    }
+
+    private void GoToNewJournal()
+    {
+        Navigation.NavigateTo("/journal");
+    }
+    
+    private void GoToDashboard()
+    {
+        Navigation.NavigateTo("/dashboard");
+    }
+
+    private void ToggleFavorite(int id)
+    {
+        var entry = DatabaseService.GetJournalEntry(id);
+        if (entry != null)
+        {
+            entry.IsFavorite = !entry.IsFavorite;
+            DatabaseService.SaveJournalEntry(entry);
+            LoadEntries();
+            StateHasChanged();
+        }
+    }
+
+    private void DeleteEntry(int id)
+    {
+        DatabaseService.DeleteJournalEntry(id);
+        LoadEntries();
+        StateHasChanged();
+    }
+}

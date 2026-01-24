@@ -1,0 +1,390 @@
+@page "/calendar"
+@inject Coursework.Services.DatabaseService DatabaseService
+@inject NavigationManager Navigation
+
+
+<div class="calendar-view-page">
+    <header class="page-header">
+        <div>
+            <button class="back-dashboard-btn" @onclick="GoToDashboard">← Back to Dashboard</button>
+            <h1>Calendar View</h1>
+            <p>Browse and search your journal entries 💗</p>
+        </div>
+        <button class="new-entry-btn" @onclick="GoToNewJournal">＋ New Entry</button>
+    </header>
+
+    <!-- Search and Filters -->
+    <div class="filters-section">
+        <div class="search-box">
+            <input type="text" 
+                   placeholder="Search by title or content..." 
+                   @bind="SearchTerm" 
+                   @bind:event="oninput"
+                   @onkeyup="HandleSearch" />
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Start Date</label>
+                <input type="date" @bind="StartDate" @bind:event="onchange" />
+            </div>
+            <div class="filter-group">
+                <label>End Date</label>
+                <input type="date" @bind="EndDate" @bind:event="onchange" />
+            </div>
+            <div class="filter-group">
+                <label>Mood</label>
+                <select @bind="SelectedMood" @bind:event="onchange">
+                    <option value="">All Moods</option>
+                    <option value="Positive">Positive</option>
+                    <option value="Neutral">Neutral</option>
+                    <option value="Negative">Negative</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Tag</label>
+                <input type="text" 
+                       placeholder="Filter by tag..." 
+                       @bind="SelectedTag" 
+                       @bind:event="oninput" />
+            </div>
+            <button class="clear-filters-btn" @onclick="ClearFilters">Clear Filters</button>
+        </div>
+    </div>
+
+    <div class="view-toggle">
+        <button class="toggle-btn @(ViewMode == "calendar" ? "active" : "")" @onclick='@(() => SetViewMode("calendar"))'>
+            📅 Calendar
+        </button>
+        <button class="toggle-btn @(ViewMode == "list" ? "active" : "")" @onclick='@(() => SetViewMode("list"))'>
+            📋 List
+        </button>
+    </div>
+
+    @if (ViewMode == "calendar")
+    {
+        <!-- Calendar View -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-btn" @onclick="PreviousMonth">←</button>
+                <h2>@CurrentMonth.ToString("MMMM yyyy")</h2>
+                <button class="nav-btn" @onclick="NextMonth">→</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="calendar-weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="calendar-days">
+                    @foreach (var day in CalendarDays)
+                    {
+                        var hasEntries = EntriesByDate.ContainsKey(day.Date) && EntriesByDate[day.Date] > 0;
+                        var isToday = day.Date == DateTime.Now.Date;
+                        var isCurrentMonth = day.Month == CurrentMonth.Month;
+                        var isPast = day.Date < DateTime.Now.Date;
+                        var isMissed = isPast && !hasEntries && isCurrentMonth;
+                        
+                        <div class="calendar-day @GetDayClass(isToday, isCurrentMonth, hasEntries, isMissed)"
+                             @onclick="@(() => SelectDate(day))">
+                            <span class="day-number">@day.Day</span>
+                            @if (hasEntries)
+                            {
+                                <span class="entry-count">@EntriesByDate[day.Date]</span>
+                            }
+                            @if (isMissed)
+                            {
+                                <span class="missed-indicator">⚠</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (SelectedDate.HasValue)
+            {
+                <div class="selected-date-entries">
+                    <div class="selected-date-header">
+                        <h3>Entries for @SelectedDate.Value.ToString("MMMM dd, yyyy")</h3>
+                        @if (SelectedDateEntries.Count == 0 && SelectedDate.Value.Date < DateTime.Now.Date)
+                        {
+                            <span class="missed-badge">Missed Day</span>
+                        }
+                    </div>
+                    @if (SelectedDateEntries.Count > 0)
+                    {
+                        @foreach (var entry in SelectedDateEntries)
+                        {
+                            <div class="entry-preview" @onclick="@(() => EditEntry(entry.Id))">
+                                <h4>@entry.Title</h4>
+                                <p>@GetPreview(entry.Content)</p>
+                                <div class="entry-meta">
+                                    <span class="mood">@GetMoodEmoji(entry.PrimaryMood) @entry.PrimaryMood</span>
+                                    <span class="time">@entry.CreatedAt.ToString("hh:mm tt")</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="no-entries-section">
+                            <p class="no-entries">No entries for this date</p>
+                            @if (SelectedDate.Value.Date < DateTime.Now.Date)
+                            {
+                                <button class="create-entry-btn" @onclick="CreateEntryForDate">Create Entry for This Date</button>
+                            }
+                            else
+                            {
+                                <button class="create-entry-btn" @onclick="GoToNewJournal">Create Entry</button>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- List/Timeline View -->
+        <div class="list-view">
+            @if (FilteredEntries.Count == 0)
+            {
+                <div class="empty-state">
+                    <div class="empty-icon">📝</div>
+                    <h2>No entries found</h2>
+                    <p>Try adjusting your search or filters</p>
+                </div>
+            }
+            else
+            {
+                <div class="entries-timeline">
+                    @foreach (var entry in PaginatedEntries)
+                    {
+                        <div class="timeline-entry" @onclick="@(() => EditEntry(entry.Id))">
+                            <div class="timeline-date">
+                                <div class="date-day">@entry.CreatedAt.Day</div>
+                                <div class="date-month">@entry.CreatedAt.ToString("MMM")</div>
+                            </div>
+                            <div class="timeline-content">
+                                <h3>@entry.Title</h3>
+                                <p>@GetPreview(entry.Content)</p>
+                                <div class="entry-tags-meta">
+                                    <span class="mood-badge">@GetMoodEmoji(entry.PrimaryMood) @entry.PrimaryMood</span>
+                                    @if (!string.IsNullOrEmpty(entry.Tags))
+                                    {
+                                        @foreach (var tag in entry.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3))
+                                        {
+                                            <span class="tag">#@tag</span>
+                                        }
+                                    }
+                                    <span class="time">@entry.CreatedAt.ToString("hh:mm tt")</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (TotalPages > 1)
+                {
+                    <div class="pagination">
+                        <button class="page-btn" @onclick="PreviousPage" disabled="@(CurrentPage == 1)">← Previous</button>
+                        <span class="page-info">Page @CurrentPage of @TotalPages</span>
+                        <button class="page-btn" @onclick="NextPage" disabled="@(CurrentPage == TotalPages)">Next →</button>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Coursework.Models.JournalEntry> FilteredEntries = new List<Coursework.Models.JournalEntry>();
+    private Dictionary<DateTime, int> EntriesByDate = new Dictionary<DateTime, int>();
+    private List<Coursework.Models.JournalEntry> SelectedDateEntries = new List<Coursework.Models.JournalEntry>();
+    private List<DateTime> CalendarDays = new List<DateTime>();
+    
+    private string ViewMode = "calendar";
+    private string SearchTerm = "";
+    private DateTime? StartDate;
+    private DateTime? EndDate;
+    private string SelectedMood = "";
+    private string SelectedTag = "";
+    private DateTime CurrentMonth = DateTime.Now;
+    private DateTime? SelectedDate;
+    
+    // Pagination
+    private int CurrentPage = 1;
+    private int PageSize = 10;
+    private int TotalPages => (int)Math.Ceiling((double)FilteredEntries.Count / PageSize);
+    private List<Coursework.Models.JournalEntry> PaginatedEntries => 
+        FilteredEntries.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+
+    protected override void OnInitialized()
+    {
+        LoadEntries();
+        GenerateCalendar();
+    }
+
+    private void LoadEntries()
+    {
+        FilteredEntries = DatabaseService.SearchAndFilterEntries(
+            SearchTerm,
+            StartDate,
+            EndDate,
+            SelectedMood,
+            SelectedTag
+        );
+        
+        EntriesByDate = DatabaseService.GetEntriesByDate(CurrentMonth);
+        
+        if (SelectedDate.HasValue)
+        {
+            SelectedDateEntries = FilteredEntries
+                .Where(e => e.CreatedAt.Date == SelectedDate.Value.Date)
+                .ToList();
+        }
+        
+        CurrentPage = 1; // Reset to first page when filters change
+    }
+
+    private void GenerateCalendar()
+    {
+        CalendarDays.Clear();
+        var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
+        var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+        
+        // Start from Sunday of the week containing the first day
+        var startDate = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
+        
+        // Generate 42 days (6 weeks)
+        for (int i = 0; i < 42; i++)
+        {
+            CalendarDays.Add(startDate.AddDays(i));
+        }
+        
+        LoadEntries(); // Reload entries for the new month
+    }
+
+    private void HandleSearch()
+    {
+        LoadEntries();
+    }
+
+    private void SetViewMode(string mode)
+    {
+        ViewMode = mode;
+        LoadEntries();
+    }
+
+    private void PreviousMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(-1);
+        GenerateCalendar();
+    }
+
+    private void NextMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(1);
+        GenerateCalendar();
+    }
+
+    private void SelectDate(DateTime date)
+    {
+        SelectedDate = date;
+        // Get all entries for this date (not just filtered ones)
+        var allEntries = DatabaseService.GetAllJournalEntries();
+        SelectedDateEntries = allEntries
+            .Where(e => e.CreatedAt.Date == date.Date)
+            .ToList();
+        StateHasChanged();
+    }
+    
+    private void CreateEntryForDate()
+    {
+        if (SelectedDate.HasValue)
+        {
+            Navigation.NavigateTo($"/journal?date={SelectedDate.Value:yyyy-MM-dd}");
+        }
+        else
+        {
+            Navigation.NavigateTo("/journal");
+        }
+    }
+
+    private void ClearFilters()
+    {
+        SearchTerm = "";
+        StartDate = null;
+        EndDate = null;
+        SelectedMood = "";
+        SelectedTag = "";
+        SelectedDate = null;
+        LoadEntries();
+    }
+
+    private void PreviousPage()
+    {
+        if (CurrentPage > 1)
+        {
+            CurrentPage--;
+        }
+    }
+
+    private void NextPage()
+    {
+        if (CurrentPage < TotalPages)
+        {
+            CurrentPage++;
+        }
+    }
+
+    private string GetPreview(string content)
+    {
+        if (string.IsNullOrEmpty(content)) return "";
+        var plainText = System.Text.RegularExpressions.Regex.Replace(content, "<.*?>", " ");
+        return plainText.Length > 150 ? plainText.Substring(0, 150) + "..." : plainText;
+    }
+
+    private string GetMoodEmoji(string mood)
+    {
+        return mood.ToLower() switch
+        {
+            "positive" => "😊",
+            "neutral" => "😐",
+            "negative" => "😔",
+            _ => "📝"
+        };
+    }
+
+    private void EditEntry(int id)
+    {
+        Navigation.NavigateTo($"/journal?id={id}");
+    }
+
+    private void GoToNewJournal()
+    {
+        Navigation.NavigateTo("/journal");
+    }
+    
+    private void GoToDashboard()
+    {
+        Navigation.NavigateTo("/dashboard");
+    }
+    
+    private string GetDayClass(bool isToday, bool isCurrentMonth, bool hasEntries, bool isMissed)
+    {
+        var classes = new List<string>();
+        if (isToday) classes.Add("today");
+        if (!isCurrentMonth) classes.Add("other-month");
+        if (hasEntries) classes.Add("has-entries");
+        if (isMissed) classes.Add("missed-day");
+        return string.Join(" ", classes);
+    }
+}
