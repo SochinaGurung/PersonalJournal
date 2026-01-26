@@ -10,10 +10,10 @@
         <div class="login-header">
             <div class="logo-icon">📓</div>
             <h2>My Journal</h2>
-            <p class="welcome-text">Welcome back 💗</p>
+            <p class="welcome-text">Welcome back </p>
         </div>
 
-        <!-- Username -->
+        <!--Label For Username -->
         <div class="form-group">
             <label for="username">Username</label>
             <input id="username"
@@ -22,7 +22,7 @@
                    @bind="Username" />
         </div>
 
-        <!-- Password -->
+        <!-- Label for Password -->
         <div class="form-group">
             <label for="password">Password</label>
             <input id="password"
@@ -31,13 +31,15 @@
                    @bind="Password" />
 
             <div class="password-row">
-                <label class="show-password">
-                    <input type="checkbox" @bind="ShowPassword" />
-                    <span>Show password</span>
+                <label class="remember-me">
+                    <input type="checkbox" @bind="RememberMe" />
+                    <span>Remember me</span>
                 </label>
 
                 <a href="#" class="forgot-link">Forgot password?</a>
             </div>
+
+
         </div>
 
         @if (!string.IsNullOrEmpty(ErrorMessage))
@@ -72,6 +74,7 @@
     private string Password = "";
     private bool IsLoggingIn = false;
     private string ErrorMessage = "";
+    private bool RememberMe = false;
 
     private string PasswordInputType =>
         ShowPassword ? "text" : "password";
