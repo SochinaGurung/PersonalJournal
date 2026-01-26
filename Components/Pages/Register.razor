@@ -4,8 +4,6 @@
 @inject Coursework.Services.AuthenticationService AuthService
 
 <div class="register-page">
-
-    <!-- Top Navigation -->
     <div class="top-bar">
         <div class="brand">
             <span class="brand-icon">📓</span>
@@ -13,10 +11,10 @@
         </div>
     </div>
 
-    <!-- Register Card -->
+    <!-- Register Form -->
     <div class="register-card">
         <h2>Register</h2>
-        <p class="subtitle">Create your account to start journaling 💗</p>
+        <p class="subtitle">Create your account to start journaling </p>
 
         <div class="form-group">
             <label for="username">Username</label>
@@ -116,7 +114,7 @@
 
         try
         {
-            // Check if username already exists
+            // Checks if username already exists
             if (DatabaseService.GetUserByUsername(Username) != null)
             {
                 ErrorMessage = "Username already exists";
@@ -124,7 +122,7 @@
                 return;
             }
 
-            // Check if email already exists
+            // Checks if email already exists
             if (DatabaseService.GetUserByEmail(Email) != null)
             {
                 ErrorMessage = "Email already registered";
@@ -132,7 +130,7 @@
                 return;
             }
 
-            // Hash password using SHA256 (deterministic)
+            // Hashes passwords
             var passwordHash = HashPassword(Password);
             var user = new Coursework.Models.User
             {
