@@ -78,112 +78,533 @@
     margin-bottom: 30px;
 }
 
-.entries-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
+/* Filters Bar */
+.filters-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
-.entry-card {
+.filter-select {
+    padding: 10px 16px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    font-size: 14px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+    border-color: #ff4f7a;
+}
+
+/* List Layout */
+.entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     background: white;
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.entry-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #fff6f8;
+    border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
+    border: 1px solid transparent;
 }
 
-.entry-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+.entry-item:hover {
+    background: #ffe3ea;
+    border-color: #ff4f7a;
+    transform: translateX(4px);
 }
 
-.entry-header {
+.entry-mood-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.entry-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #333;
+.entry-main {
     flex: 1;
-    margin-right: 10px;
+    min-width: 0;
 }
 
-.entry-actions {
+.entry-main h3 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.entry-preview {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.entry-right {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.entry-date {
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+}
+
+.entry-arrow {
+    color: #999;
+    font-size: 18px;
+    transition: transform 0.2s;
+}
+
+.entry-item:hover .entry-arrow {
+    transform: translateX(4px);
+    color: #ff4f7a;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.page-nav-btn {
+    background: transparent;
+    color: #666;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.page-nav-btn:hover:not(:disabled) {
+    background: #f0f0f0;
+    border-color: #ff4f7a;
+    color: #ff4f7a;
+}
+
+.page-nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    align-items: center;
     gap: 8px;
 }
 
-.icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background 0.2s;
-}
-
-.icon-btn:hover {
-    background: #f0f0f0;
-}
-
-.delete-btn:hover {
-    background: #ffe3ea;
-}
-
-.entry-content {
-    color: #666;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 12px;
-    max-height: 80px;
-    overflow: hidden;
-}
-
-.entry-footer {
+.page-number {
+    min-width: 36px;
+    height: 36px;
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
     align-items: center;
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 8px;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #666;
 }
 
-.mood-badge {
-    background: #ffe3ea;
-    color: #ff4f7a;
-    padding: 4px 10px;
-    border-radius: 12px;
+.page-number:hover:not(.active) {
+    background: #f0f0f0;
+    border-color: #e0e0e0;
+}
+
+.page-number.active {
+    background: #ff4f7a;
+    color: white;
+    border-color: #ff4f7a;
+    cursor: default;
+}
+
+.page-ellipsis {
+    color: #999;
+    padding: 0 4px;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 0;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+    color: #666;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-cancel {
+    background: #f0f0f0;
+    color: #666;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
     font-weight: 500;
 }
 
-.category {
-    background: #f0f0f0;
-    padding: 4px 10px;
-    border-radius: 12px;
+.btn-cancel:hover {
+    background: #e0e0e0;
 }
 
-.date {
-    margin-left: auto;
+.btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 500;
 }
 
-.entry-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 8px;
+.btn-delete:hover {
+    background: #dc2626;
 }
 
-.entry-tags .tag {
-    background: #f0f0f0;
+/* Dark Theme for JournalList */
+.theme-dark .journal-list-page {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.theme-dark .page-header h1 {
+    color: #ffffff;
+}
+
+.theme-dark .page-header p {
+    color: #b0b0b0;
+}
+
+.theme-dark .back-dashboard-btn {
+    background: #3d3d3d;
+    border-color: #ff4f7a;
+    color: #ff4f7a;
+}
+
+.theme-dark .new-entry-btn {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .empty-state {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .empty-icon {
+    color: #9ca3af;
+}
+
+.theme-dark .empty-state h2 {
+    color: #ffffff;
+}
+
+.theme-dark .filters-bar .filter-select {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .filters-bar .filter-select:focus {
+    border-color: #ff4f7a;
+}
+
+.theme-dark .entries-list {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+.theme-dark .entry-item {
+    background: #1a1a1a;
+    border-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .entry-item:hover {
+    background: #2d2d2d;
+    border-color: #ff4f7a;
+}
+
+.theme-dark .entry-main h3 {
+    color: #ffffff;
+}
+
+.theme-dark .entry-preview {
+    color: #b0b0b0;
+}
+
+.theme-dark .entry-date {
+    color: #888;
+}
+
+.theme-dark .entry-arrow {
     color: #666;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 11px;
+}
+
+.theme-dark .entry-mood-icon {
+    background: #2d2d2d;
+}
+
+.theme-dark .mood-badge {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .category {
+    color: #b0b0b0;
+}
+
+.theme-dark .date {
+    color: #9ca3af;
+}
+
+.theme-dark .entry-tags .tag {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .page-nav-btn {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .page-nav-btn:hover:not(:disabled) {
+    background: #3d3d3d;
+    border-color: #ff4f7a;
+    color: #ff4f7a;
+}
+
+.theme-dark .page-number {
+    color: #b0b0b0;
+}
+
+.theme-dark .page-number:hover:not(.active) {
+    background: #3d3d3d;
+    border-color: #404040;
+}
+
+.theme-dark .page-number.active {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .page-ellipsis {
+    color: #666;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-header i {
+    color: #ef4444;
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-body p {
+    margin: 0;
+    font-size: 1rem;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancel,
+.btn-delete {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-cancel:hover {
+    background: #e5e7eb;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+}
+
+.theme-dark .modal-content {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .modal-header {
+    border-color: #404040;
+}
+
+.theme-dark .modal-header h3 {
+    color: #e0e0e0;
+}
+
+.theme-dark .modal-body p {
+    color: #d1d5db;
+}
+
+.theme-dark .modal-footer {
+    border-color: #404040;
+}
+
+.theme-dark .btn-cancel {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .btn-cancel:hover {
+    background: #4d4d4d;
 }
