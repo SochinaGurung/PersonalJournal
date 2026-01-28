@@ -310,3 +310,332 @@ select {
     border: none;
     color: #ef4444;
 }
+
+/* Dark Theme for NewJournal */
+.theme-dark .page {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.theme-dark .topbar {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .brand {
+    color: #e0e0e0;
+}
+
+.theme-dark .back-btn {
+    color: #e0e0e0;
+}
+
+.theme-dark .date {
+    color: #b0b0b0;
+}
+
+.theme-dark .page-title h1 {
+    color: #ffffff;
+}
+
+.theme-dark .page-title p {
+    color: #b0b0b0;
+}
+
+.theme-dark .status {
+    color: #b0b0b0;
+}
+
+.theme-dark .editor {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .title-input {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .title-input::placeholder {
+    color: #888888;
+}
+
+.theme-dark .toolbar {
+    background: #3d3d3d;
+}
+
+.theme-dark .editor-footer {
+    color: #b0b0b0;
+}
+
+.theme-dark .sidebar {
+    background: #2d2d2d;
+}
+
+.theme-dark .card {
+    background: #3d3d3d;
+    color: #e0e0e0;
+}
+
+.theme-dark .card h3 {
+    color: #ffffff;
+}
+
+.theme-dark .label {
+    color: #b0b0b0;
+}
+
+.theme-dark .moods button {
+    background: #404040;
+    border-color: #555555;
+    color: #e0e0e0;
+}
+
+.theme-dark .moods button.selected {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark select {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .chips span {
+    background: #404040;
+    color: #e0e0e0;
+    border-color: #555555;
+}
+
+.theme-dark .chips span.selected {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .tag-input {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .tag-input::placeholder {
+    color: #888888;
+}
+
+.theme-dark .tag-list span {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .actions {
+    background: #2d2d2d;
+}
+
+.theme-dark .save {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .delete {
+    color: #f87171;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-header i {
+    color: #ef4444;
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-body p {
+    margin: 0;
+    font-size: 1rem;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancel,
+.btn-delete {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-cancel:hover {
+    background: #e5e7eb;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+}
+
+.theme-dark .modal-content {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .modal-header {
+    border-color: #404040;
+}
+
+.theme-dark .modal-header h3 {
+    color: #e0e0e0;
+}
+
+.theme-dark .modal-body p {
+    color: #d1d5db;
+}
+
+.theme-dark .modal-footer {
+    border-color: #404040;
+}
+
+.theme-dark .btn-cancel {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .btn-cancel:hover {
+    background: #4d4d4d;
+}
+
+/* Message Popup Styles */
+.message-overlay {
+    z-index: 1001; /* Above delete confirmation modal */
+}
+
+.message-modal {
+    max-width: 400px;
+    width: 90%;
+}
+
+.message-header {
+    background-color: #ff4f7a !important;
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.message-header h3 {
+    color: white !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.message-header i {
+    font-size: 1.5rem;
+}
+
+.btn-ok {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: #ff4f7a;
+    color: white;
+    transition: all 0.2s;
+    min-width: 80px;
+}
+
+.btn-ok:hover {
+    background: #e63950;
+}
+
+.theme-dark .message-header {
+    background-color: #ff4f7a !important;
+}
+
+.theme-dark .message-header h3 {
+    color: white !important;
+}
+
+.theme-dark .btn-ok {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .btn-ok:hover {
+    background: #e63950;
+}

@@ -11,15 +11,15 @@
     <header class="topbar">
         <div class="brand">
             <button class="back-btn" @onclick="GoToDashboard" title="Back to Dashboard">
-                ← Back
+                <i class="bi bi-arrow-left"></i> Back
             </button>
-            <div class="logo">📕</div>
+            <div class="logo"><i class="bi bi-journal-bookmark"></i></div>
             <span>My Journal</span>
         </div>
 
         <div class="header-right">
             <span class="date">@CurrentDate</span>
-            <img class="avatar" />
+            <img class="avatar" src="images/user.png" alt="User Avatar" />
         </div>
     </header>
 
@@ -27,9 +27,8 @@
     <section class="page-title">
         <div>
             <h1>Today’s Journal</h1>
-            <p>Write your thoughts for the day 💗</p>
+            <p>Write your thoughts for the day <i class="bi bi-heart-fill"></i></p>
         </div>
-        <span class="status">@StatusMessage</span>
     </section>
 
     <!-- Content -->
@@ -50,20 +49,20 @@
         <!-- Sidebar -->
         <aside class="sidebar">
 
-            <!-- Mood -->
+            <!-- Mood distribution -->
             <div class="card">
-                <h3>😊 How are you feeling?</h3>
+                <h3><i class="bi bi-emoji-smile"></i> How are you feeling?</h3>
 
                 <p class="label">PRIMARY MOOD *</p>
                 <div class="moods">
                     <button type="button" @onclick="@(() => SetPrimaryMood("Positive"))" class="@(PrimaryMood == "Positive" ? "selected" : "")">
-                        <span class="emoji">😊</span><span>Positive</span>
+                        <span class="emoji"><i class="bi bi-emoji-smile"></i></span><span>Positive</span>
                     </button>
                     <button type="button" @onclick="@(() => SetPrimaryMood("Neutral"))" class="@(PrimaryMood == "Neutral" ? "selected" : "")">
-                        <span class="emoji">😐</span><span>Neutral</span>
+                        <span class="emoji"><i class="bi bi-emoji-neutral"></i></span><span>Neutral</span>
                     </button>
                     <button type="button" @onclick="@(() => SetPrimaryMood("Negative"))" class="@(PrimaryMood == "Negative" ? "selected" : "")">
-                        <span class="emoji">😔</span><span>Negative</span>
+                        <span class="emoji"><i class="bi bi-emoji-frown"></i></span><span>Negative</span>
                     </button>
                 </div>
 
@@ -87,11 +86,10 @@
                 }
                 @if (SelectedSecondaryMoods.Count > 2)
                 {
-                    <small style="color: #ef4444;">⚠ Maximum 2 secondary moods allowed</small>
+                    <small style="color: #ef4444;"><i class="bi bi-exclamation-triangle"></i> Maximum 2 secondary moods allowed</small>
                 }
             </div>
 
-            <!-- Meta -->
             <div class="card">
                 <p class="label">CATEGORY</p>
                 <select @bind="Category">
@@ -143,7 +141,6 @@
                 </div>
             </div>
 
-            <!-- Actions -->
             <button class="save" @onclick="Save" disabled="@IsSaving"> @(IsSaving ? "Saving..." : "Save Entry")</button>
             @if (CurrentEntryId > 0)
             {
@@ -157,6 +154,61 @@
 
     </main>
 </div>
+
+<!-- Delete Confirmation Modal -->
+@if (ShowDeleteConfirmation)
+{
+    <div class="modal-overlay" @onclick="CancelDelete">
+        <div class="modal-content" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <h3><i class="bi bi-exclamation-triangle"></i> Confirm Delete</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this journal?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" @onclick="CancelDelete">Cancel</button>
+                <button class="btn-delete" @onclick="ConfirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Message Popup Modal -->
+@if (ShowMessagePopup)
+{
+    <div class="modal-overlay message-overlay" @onclick="CloseMessagePopup">
+        <div class="modal-content message-modal" @onclick:stopPropagation="true">
+            <div class="modal-header message-header" style="background-color: @GetMessageColor();">
+                <h3>
+                    @if (MessageType == "success")
+                    {
+                        <i class="bi bi-check-circle"></i>
+                    }
+                    else if (MessageType == "error")
+                    {
+                        <i class="bi bi-exclamation-triangle"></i>
+                    }
+                    else if (MessageType == "info")
+                    {
+                        <i class="bi bi-info-circle"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-bell"></i>
+                    }
+                    @GetMessageTitle()
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>@StatusMessage</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ok" @onclick="CloseMessagePopup">OK</button>
+            </div>
+        </div>
+    </div>
+}
 
 @code{
     private string HtmlContent = "";
@@ -173,6 +225,9 @@
     private DateTime UpdatedAt = DateTime.Now;
     private int WordCount = 0;
     private bool ShowTagSuggestions = false;
+    private bool ShowDeleteConfirmation = false;
+    private bool ShowMessagePopup = false;
+    private string MessageType = "info"; // "success", "error", "info", "warning"
     
     // Secondary moods organized by primary mood category
     private List<string> GetAvailableSecondaryMoods()
@@ -291,7 +346,7 @@
             }
             catch (JSException ex)
             {
-                // Handle JavaScript errors gracefully
+                // Handle JavaScript errors 
                 Console.WriteLine($"Error initializing Quill: {ex.Message}");
             }
         }
@@ -421,34 +476,34 @@
     {
         if (string.IsNullOrWhiteSpace(Title))
         {
-            StatusMessage = "⚠ Please enter a title";
+            ShowMessage("Please enter a title", "error");
             return;
         }
         
         if (string.IsNullOrWhiteSpace(PrimaryMood))
         {
-            StatusMessage = "⚠ Please select a primary mood";
+            ShowMessage("Please select a primary mood", "error");
             return;
         }
         
         IsSaving = true;
-        StatusMessage = "Saving...";
-        StateHasChanged();
         
         try
         {
             HtmlContent = await JS.InvokeAsync<string>("getQuillHtml");
             
-            // Check if entry already exists for this date (one entry per day rule)
-            var entryDate = CreatedAt.Date;
-            var existingEntry = DatabaseService.GetJournalEntryByDate(entryDate);
             
-            if (existingEntry != null && existingEntry.Id != CurrentEntryId)
+            var entryDate = CreatedAt.Date;
+            
+            if (CurrentEntryId == 0) // Creating a new entry
             {
-                StatusMessage = "⚠ An entry already exists for this date. You can only have one entry per day.";
-                IsSaving = false;
-                StateHasChanged();
-                return;
+                var existingEntry = DatabaseService.GetJournalEntryByDate(entryDate);
+                if (existingEntry != null)
+                {
+                    IsSaving = false;
+                    ShowMessage("An entry already exists for this date. You can update it instead of creating a new one.", "warning");
+                    return;
+                }
             }
             
             var entry = new Coursework.Models.JournalEntry
@@ -471,21 +526,22 @@
                 CurrentEntryId = savedEntry.Id;
                 UpdatedAt = savedEntry.UpdatedAt;
                 CreatedAt = savedEntry.CreatedAt;
-                StatusMessage = "✔ Saved successfully";
+                // Navigate to dashboard after successful save
+                Navigation.NavigateTo("/dashboard");
             }
             else
             {
-                StatusMessage = "⚠ Error saving entry";
+                ShowMessage("Error saving entry", "error");
             }
         }
         catch (JSException ex)
         {
-            StatusMessage = "⚠ Error: " + ex.Message;
+            ShowMessage("Error: " + ex.Message, "error");
             Console.WriteLine($"Error getting Quill content: {ex.Message}");
         }
         catch (Exception ex)
         {
-            StatusMessage = "⚠ Error: " + ex.Message;
+            ShowMessage("Error: " + ex.Message, "error");
             Console.WriteLine($"Error saving entry: {ex.Message}");
         }
         finally
@@ -507,9 +563,55 @@
     {
         if (CurrentEntryId > 0)
         {
+            ShowDeleteConfirmation = true;
+            StateHasChanged();
+        }
+    }
+    
+    private void ConfirmDelete()
+    {
+        if (CurrentEntryId > 0)
+        {
             DatabaseService.DeleteJournalEntry(CurrentEntryId);
+            ShowDeleteConfirmation = false;
             Navigation.NavigateTo("/dashboard");
         }
+    }
+    
+    private void CancelDelete()
+    {
+        ShowDeleteConfirmation = false;
+        StateHasChanged();
+    }
+    
+    private void ShowMessage(string message, string type = "info")
+    {
+        StatusMessage = message;
+        MessageType = type;
+        ShowMessagePopup = true;
+        StateHasChanged();
+    }
+    
+    private void CloseMessagePopup()
+    {
+        ShowMessagePopup = false;
+        StateHasChanged();
+    }
+    
+    private string GetMessageColor()
+    {
+        return "#ff4f7a"; // Pink theme color for all message types
+    }
+    
+    private string GetMessageTitle()
+    {
+        return MessageType switch
+        {
+            "success" => "Success",
+            "error" => "Error",
+            "warning" => "Warning",
+            _ => "Information"
+        };
     }
     
     private void ResetForm()
