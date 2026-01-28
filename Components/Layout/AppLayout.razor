@@ -1,5 +1,33 @@
 @inherits LayoutComponentBase
+@inject Coursework.Services.ThemeService ThemeService
+@inject IJSRuntime JS
+@implements IDisposable
 
 <div class="app-layout">
     @Body
 </div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Apply initial theme
+            await JS.InvokeVoidAsync("applyTheme", ThemeService.CurrentTheme);
+            
+            // Subscribe to theme changes
+            ThemeService.OnThemeChanged += OnThemeChanged;
+        }
+    }
+
+    private async void OnThemeChanged()
+    {
+        await JS.InvokeVoidAsync("applyTheme", ThemeService.CurrentTheme);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= OnThemeChanged;
+    }
+}
