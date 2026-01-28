@@ -80,7 +80,7 @@
             return Convert.ToBase64String(hash);
         }
     }
-
+    <!-- CHecks the requirements for Register -->
     private void HandleRegister()
     {
         ErrorMessage = "";
@@ -91,7 +91,11 @@
             ErrorMessage = "Please fill in all fields";
             return;
         }
-
+        if (!Email.Contains("@gmail.com"))
+        {
+            ErrorMessage = "Please enter a valid Gmail address";
+            return;
+        }
         if (Password != ConfirmPassword)
         {
             ErrorMessage = "Passwords do not match";
@@ -126,7 +130,7 @@
             if (DatabaseService.GetUserByEmail(Email) != null)
             {
                 ErrorMessage = "Email already registered";
-                IsRegistering = false;
+                IsRegistering = false;  
                 return;
             }
 

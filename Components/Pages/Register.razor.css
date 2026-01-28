@@ -141,3 +141,75 @@
     text-decoration: none;
     font-weight: 500;
 }
+
+/* Dark Theme for Register */
+.theme-dark .register-page {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+}
+
+.theme-dark .brand {
+    color: #e0e0e0;
+}
+
+.theme-dark .back-home {
+    color: #ff5a7a;
+}
+
+.theme-dark .register-card {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.theme-dark .register-card h2 {
+    color: #ffffff;
+}
+
+.theme-dark .subtitle {
+    color: #ff5a7a;
+}
+
+.theme-dark .form-group label {
+    color: #e0e0e0;
+}
+
+.theme-dark .form-group input {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .form-group input:focus {
+    border-color: #ff5a7a;
+    background: #404040;
+}
+
+.theme-dark .form-group input::placeholder {
+    color: #888888;
+}
+
+.theme-dark .terms {
+    color: #b0b0b0;
+}
+
+.theme-dark .terms a {
+    color: #ff5a7a;
+}
+
+.theme-dark .register-btn {
+    background: linear-gradient(135deg, #ff4f7a, #ff2f63);
+    color: white;
+}
+
+.theme-dark .error-message {
+    background: #3a1e1e;
+    color: #f87171;
+}
+
+.theme-dark .login-text {
+    color: #b0b0b0;
+}
+
+.theme-dark .login-link {
+    color: #ff5a7a;
+}
