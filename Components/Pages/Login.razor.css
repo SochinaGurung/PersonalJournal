@@ -189,3 +189,80 @@
         color: #999;
         text-decoration: none;
     }
+
+/* Dark Theme for Login */
+.theme-dark .login-page {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+}
+
+.theme-dark .login-card {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.theme-dark .login-header h2 {
+    color: #ffffff;
+}
+
+.theme-dark .welcome-text {
+    color: #b0b0b0;
+}
+
+.theme-dark .form-group label {
+    color: #e0e0e0;
+}
+
+.theme-dark .form-group input {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .form-group input:focus {
+    border-color: #e56b9f;
+    box-shadow: 0 0 0 2px rgba(229,107,159,0.3);
+    background: #404040;
+}
+
+.theme-dark .form-group input::placeholder {
+    color: #888888;
+}
+
+.theme-dark .toggle-password {
+    color: #e56b9f;
+}
+
+.theme-dark .remember-me span {
+    color: #e0e0e0;
+}
+
+.theme-dark .forgot-link {
+    color: #e56b9f;
+}
+
+.theme-dark .login-btn {
+    background: #e56b9f;
+    color: #fff;
+}
+
+.theme-dark .login-btn:hover {
+    background: #d65a8a;
+}
+
+.theme-dark .error-message {
+    background: #3a1e1e;
+    color: #f87171;
+}
+
+.theme-dark .register-text {
+    color: #b0b0b0;
+}
+
+.theme-dark .register-text a {
+    color: #e56b9f;
+}
+
+.theme-dark .login-footer a {
+    color: #888888;
+}
