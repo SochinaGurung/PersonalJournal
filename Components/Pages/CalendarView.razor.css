@@ -551,3 +551,133 @@
     color: #666;
     font-weight: 500;
 }
+
+/* Dark Theme for CalendarView */
+.theme-dark .calendar-view-page {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.theme-dark .page-header h1 {
+    color: #ffffff;
+}
+
+.theme-dark .page-header p {
+    color: #b0b0b0;
+}
+
+.theme-dark .back-dashboard-btn {
+    background: #3d3d3d;
+    border-color: #ff4f7a;
+    color: #ff4f7a;
+}
+
+.theme-dark .new-entry-btn {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .filters-section {
+    background: #2d2d2d;
+}
+
+.theme-dark .search-box input {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .search-box input::placeholder {
+    color: #888888;
+}
+
+.theme-dark .filter-group label {
+    color: #b0b0b0;
+}
+
+.theme-dark .filter-group input,
+.theme-dark .filter-group select {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .view-toggle {
+    background: #2d2d2d;
+}
+
+.theme-dark .toggle-btn {
+    background: #3d3d3d;
+    color: #e0e0e0;
+}
+
+.theme-dark .toggle-btn.active {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .calendar-container {
+    background: #2d2d2d;
+}
+
+.theme-dark .calendar-header h2 {
+    color: #ffffff;
+}
+
+.theme-dark .nav-btn {
+    background: #3d3d3d;
+    color: #e0e0e0;
+    border-color: #404040;
+}
+
+.theme-dark .calendar-day {
+    background: #3d3d3d;
+    color: #e0e0e0;
+    border-color: #404040;
+}
+
+.theme-dark .calendar-day.has-entry {
+    background: #4d4d4d;
+}
+
+.theme-dark .calendar-day.today {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .list-view {
+    background: #2d2d2d;
+}
+
+.theme-dark .entry-card {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .entry-card h3 {
+    color: #ffffff;
+}
+
+.theme-dark .mood-badge {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .tag {
+    background: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .empty-state {
+    color: #b0b0b0;
+}
+
+.theme-dark .page-btn {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .page-info {
+    color: #b0b0b0;
+}

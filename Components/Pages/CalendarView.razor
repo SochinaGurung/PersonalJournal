@@ -6,11 +6,11 @@
 <div class="calendar-view-page">
     <header class="page-header">
         <div>
-            <button class="back-dashboard-btn" @onclick="GoToDashboard">← Back to Dashboard</button>
+            <button class="back-dashboard-btn" @onclick="GoToDashboard"><i class="bi bi-arrow-left"></i> Back to Dashboard</button>
             <h1>Calendar View</h1>
-            <p>Browse and search your journal entries 💗</p>
+            <p>Browse and search your journal entries <i class="bi bi-heart-fill"></i></p>
         </div>
-        <button class="new-entry-btn" @onclick="GoToNewJournal">＋ New Entry</button>
+        <button class="new-entry-btn" @onclick="GoToNewJournal"><i class="bi bi-plus-circle"></i> New Entry</button>
     </header>
 
     <!-- Search and Filters -->
@@ -21,7 +21,7 @@
                    @bind="SearchTerm" 
                    @bind:event="oninput"
                    @onkeyup="HandleSearch" />
-            <span class="search-icon">🔍</span>
+            <span class="search-icon"><i class="bi bi-search"></i></span>
         </div>
 
         <div class="filters">
@@ -55,7 +55,7 @@
 
     <div class="view-toggle">
         <button class="toggle-btn @(ViewMode == "calendar" ? "active" : "")" @onclick='@(() => SetViewMode("calendar"))'>
-            📅 Calendar
+            <i class="bi bi-calendar"></i> Calendar
         </button>
         <button class="toggle-btn @(ViewMode == "list" ? "active" : "")" @onclick='@(() => SetViewMode("list"))'>
             📋 List
@@ -67,9 +67,9 @@
         <!-- Calendar View -->
         <div class="calendar-container">
             <div class="calendar-header">
-                <button class="nav-btn" @onclick="PreviousMonth">←</button>
+                <button class="nav-btn" @onclick="PreviousMonth"><i class="bi bi-chevron-left"></i></button>
                 <h2>@CurrentMonth.ToString("MMMM yyyy")</h2>
-                <button class="nav-btn" @onclick="NextMonth">→</button>
+                <button class="nav-btn" @onclick="NextMonth"><i class="bi bi-chevron-right"></i></button>
             </div>
 
             <div class="calendar-grid">
@@ -100,7 +100,7 @@
                             }
                             @if (isMissed)
                             {
-                                <span class="missed-indicator">⚠</span>
+                                <span class="missed-indicator"><i class="bi bi-exclamation-circle"></i></span>
                             }
                         </div>
                     }
@@ -125,7 +125,7 @@
                                 <h4>@entry.Title</h4>
                                 <p>@GetPreview(entry.Content)</p>
                                 <div class="entry-meta">
-                                    <span class="mood">@GetMoodEmoji(entry.PrimaryMood) @entry.PrimaryMood</span>
+                                    <span class="mood">@((MarkupString)GetMoodEmoji(entry.PrimaryMood)) @entry.PrimaryMood</span>
                                     <span class="time">@entry.CreatedAt.ToString("hh:mm tt")</span>
                                 </div>
                             </div>
@@ -156,7 +156,7 @@
             @if (FilteredEntries.Count == 0)
             {
                 <div class="empty-state">
-                    <div class="empty-icon">📝</div>
+                    <div class="empty-icon"><i class="bi bi-journal-text" style="font-size: 4rem;"></i></div>
                     <h2>No entries found</h2>
                     <p>Try adjusting your search or filters</p>
                 </div>
@@ -175,7 +175,7 @@
                                 <h3>@entry.Title</h3>
                                 <p>@GetPreview(entry.Content)</p>
                                 <div class="entry-tags-meta">
-                                    <span class="mood-badge">@GetMoodEmoji(entry.PrimaryMood) @entry.PrimaryMood</span>
+                                    <span class="mood-badge">@((MarkupString)GetMoodEmoji(entry.PrimaryMood)) @entry.PrimaryMood</span>
                                     @if (!string.IsNullOrEmpty(entry.Tags))
                                     {
                                         @foreach (var tag in entry.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3))
@@ -194,9 +194,9 @@
                 @if (TotalPages > 1)
                 {
                     <div class="pagination">
-                        <button class="page-btn" @onclick="PreviousPage" disabled="@(CurrentPage == 1)">← Previous</button>
+                        <button class="page-btn" @onclick="PreviousPage" disabled="@(CurrentPage == 1)"><i class="bi bi-chevron-left"></i> Previous</button>
                         <span class="page-info">Page @CurrentPage of @TotalPages</span>
-                        <button class="page-btn" @onclick="NextPage" disabled="@(CurrentPage == TotalPages)">Next →</button>
+                        <button class="page-btn" @onclick="NextPage" disabled="@(CurrentPage == TotalPages)">Next <i class="bi bi-chevron-right"></i></button>
                     </div>
                 }
             }
@@ -356,10 +356,10 @@
     {
         return mood.ToLower() switch
         {
-            "positive" => "😊",
-            "neutral" => "😐",
-            "negative" => "😔",
-            _ => "📝"
+            "positive" => "<i class=\"bi bi-emoji-smile\"></i>",
+            "neutral" => "<i class=\"bi bi-emoji-neutral\"></i>",
+            "negative" => "<i class=\"bi bi-emoji-frown\"></i>",
+            _ => "<i class=\"bi bi-journal-text\"></i>"
         };
     }
 
