@@ -38,6 +38,7 @@ namespace Coursework.Services
         {
             var dateOnly = date.Date;
             return _context.JournalEntries
+                .AsNoTracking() // To avoid tracking conflicts
                 .Where(e => e.CreatedAt.Date == dateOnly)
                 .FirstOrDefault();
         }
@@ -114,8 +115,26 @@ namespace Coursework.Services
             }
             else
             {
-                entry.UpdatedAt = DateTime.Now;
-                _context.JournalEntries.Update(entry);
+                // Check if entity is already tracked
+                var trackedEntry = _context.JournalEntries.Find(entry.Id);
+                if (trackedEntry != null)
+                {
+                    // Update the tracked entity's properties
+                    trackedEntry.Title = entry.Title;
+                    trackedEntry.Content = entry.Content;
+                    trackedEntry.PrimaryMood = entry.PrimaryMood;
+                    trackedEntry.SecondaryMoods = entry.SecondaryMoods;
+                    trackedEntry.Category = entry.Category;
+                    trackedEntry.Tags = entry.Tags;
+                    trackedEntry.CreatedAt = entry.CreatedAt;
+                    trackedEntry.UpdatedAt = DateTime.Now;
+                }
+                else
+                {
+                    // Entity not tracked, use Update
+                    entry.UpdatedAt = DateTime.Now;
+                    _context.JournalEntries.Update(entry);
+                }
             }
             
             _context.SaveChanges();
@@ -340,12 +359,20 @@ namespace Coursework.Services
                 query = query.Where(e => e.PrimaryMood == mood || e.SecondaryMoods.Contains(mood));
             }
 
+            // Load data first, then filter by tag in memory 
+            var entries = query.ToList();
+
             if (!string.IsNullOrWhiteSpace(tag))
             {
-                query = query.Where(e => e.Tags.Contains(tag, StringComparison.OrdinalIgnoreCase));
+                var tagLower = tag.ToLower();
+                entries = entries
+                    .Where(e => !string.IsNullOrEmpty(e.Tags) && 
+                           e.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                 .Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
             }
 
-            return query.OrderByDescending(e => e.CreatedAt).ToList();
+            return entries.OrderByDescending(e => e.CreatedAt).ToList();
         }
 
         public List<JournalEntry> SearchAndFilterEntries(
@@ -380,12 +407,19 @@ namespace Coursework.Services
                 query = query.Where(e => e.PrimaryMood == mood || e.SecondaryMoods.Contains(mood));
             }
 
+            // Load data first, then filter by tag in memory 
+            var entries = query.ToList();
+
             if (!string.IsNullOrWhiteSpace(tag))
             {
-                query = query.Where(e => e.Tags.Contains(tag, StringComparison.OrdinalIgnoreCase));
+                entries = entries
+                    .Where(e => !string.IsNullOrEmpty(e.Tags) && 
+                           e.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                 .Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
             }
 
-            return query.OrderByDescending(e => e.CreatedAt).ToList();
+            return entries.OrderByDescending(e => e.CreatedAt).ToList();
         }
 
         public Dictionary<DateTime, int> GetEntriesByDate(DateTime month)

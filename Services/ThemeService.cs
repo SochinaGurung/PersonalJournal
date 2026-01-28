@@ -2,10 +2,13 @@ namespace Coursework.Services
 {
     public class ThemeService
     {
+        public const string Light = "light";
+        public const string Dark = "dark";
+
         public event Action? OnThemeChanged;
-        
-        private string _currentTheme = "light";
-        
+
+        private string _currentTheme = Light;
+
         public string CurrentTheme
         {
             get => _currentTheme;
@@ -18,17 +21,17 @@ namespace Coursework.Services
                 }
             }
         }
-        
-        public bool IsDarkMode => CurrentTheme == "dark";
-        
+
+        public bool IsDarkMode => CurrentTheme == Dark;
+
         public void ToggleTheme()
         {
-            CurrentTheme = CurrentTheme == "light" ? "dark" : "light";
+            CurrentTheme = IsDarkMode ? Light : Dark;
         }
-        
+
         public void SetTheme(string theme)
         {
-            if (theme == "light" || theme == "dark")
+            if (theme == Light || theme == Dark)
             {
                 CurrentTheme = theme;
             }
