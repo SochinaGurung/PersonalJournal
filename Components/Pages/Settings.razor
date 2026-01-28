@@ -7,7 +7,7 @@
 
 <div class="settings-page">
     <header class="page-header">
-        <button class="back-dashboard-btn" @onclick="GoToDashboard">← Back to Dashboard</button>
+        <button class="back-dashboard-btn" @onclick="GoToDashboard"><i class="bi bi-arrow-left"></i> Back to Dashboard</button>
         <h1>Settings</h1>
     </header>
 
@@ -19,12 +19,12 @@
                 <label>Theme</label>
                 <div class="theme-toggle">
                     <button class="theme-btn @(ThemeService.CurrentTheme == "light" ? "active" : "")" 
-                            @onclick='@(() => ThemeService.SetTheme("light"))'>
-                        ☀️ Light
+                            @onclick='@(() => SetTheme("light"))'>
+                        <i class="bi bi-sun"></i> Light
                     </button>
                     <button class="theme-btn @(ThemeService.CurrentTheme == "dark" ? "active" : "")" 
-                            @onclick='@(() => ThemeService.SetTheme("dark"))'>
-                        🌙 Dark
+                            @onclick='@(() => SetTheme("dark"))'>
+                        <i class="bi bi-moon"></i> Dark
                     </button>
                 </div>
             </div>
@@ -45,7 +45,14 @@
                         <input type="date" @bind="ExportEndDate" />
                     </div>
                     <button class="export-btn" @onclick="ExportToPdf" disabled="@IsExporting">
-                        @(IsExporting ? "Exporting..." : "📄 Export to PDF")
+                        @if (IsExporting)
+                        {
+                            <span>Exporting...</span>
+                        }
+                        else
+                        {
+                            <span><i class="bi bi-file-pdf"></i> Export to PDF</span>
+                        }
                     </button>
                 </div>
                 @if (!string.IsNullOrEmpty(ExportMessage))
@@ -74,9 +81,18 @@
     private bool IsExporting = false;
     private string ExportMessage = "";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         ThemeService.OnThemeChanged += () => InvokeAsync(StateHasChanged);
+        // Apply initial theme
+        await JS.InvokeVoidAsync("applyTheme", ThemeService.CurrentTheme);
+    }
+
+    private async Task SetTheme(string theme)
+    {
+        ThemeService.SetTheme(theme);
+        await JS.InvokeVoidAsync("applyTheme", theme);
+        StateHasChanged();
     }
 
     private async Task ExportToPdf()
