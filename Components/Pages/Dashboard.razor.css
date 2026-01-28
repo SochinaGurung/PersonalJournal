@@ -4,6 +4,57 @@
     background: #fff6f8;
     font-family: "Segoe UI", sans-serif;
 }
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    background-color:white;
+    border-radius:10px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.header-date {
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: #9ca3af;
+}
+
+.top-header h1 {
+    font-size: 34px;
+    font-weight: 700;
+    margin: 0;
+    color: #0f172a;
+}
+
+.header-sub {
+    font-size: 16px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #fde9dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .avatar img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+    }
+
 
 /* Sidebar */
 .sidebar {
@@ -13,6 +64,31 @@
     display: flex;
     flex-direction: column;
 }
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #9ca3af;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+    .nav-link i {
+        font-size: 18px;
+    }
+
+    .nav-link.active {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        color: white;
+    }
+
+    .nav-link:hover {
+        background: rgba(34, 197, 94, 0.15);
+        color: #22c55e;
+    }
+
 
 .user-profile {
     margin-bottom: 20px;
@@ -55,10 +131,16 @@
 }
 
 .logout-btn {
-    margin-top: 10px;
+    margin-top: auto;
     background: white;
     color: #ff4f7a;
     border: 2px solid #ff4f7a;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: #ff4f7a;
+    color: white;
 }
 
 .version {
@@ -146,7 +228,6 @@
 }
 
 /* Charts placeholders */
-.donut,
 .line-chart {
     height: 140px;
     background: #ffe3ea;
@@ -157,7 +238,125 @@
     margin: 16px 0;
 }
 
-/* Legend */
+/* Mood Distribution Chart */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.card-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.card-header h3 i {
+    color: #9ca3af;
+    font-size: 16px;
+}
+
+.mood-chart-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-top: 10px;
+}
+
+.donut-chart-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+}
+
+.donut-chart {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.donut-segment {
+    transition: opacity 0.2s;
+}
+
+.donut-segment:hover {
+    opacity: 0.8;
+}
+
+.donut-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.donut-emoji {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.donut-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9ca3af;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.mood-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-label {
+    flex: 1;
+    color: #374151;
+    font-weight: 500;
+}
+
+.legend-percentage {
+    color: #0f172a;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+}
+
+.no-data {
+    padding: 40px 20px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+/* Legacy legend styles for other charts */
 .legend {
     list-style: none;
     padding: 0;
@@ -187,4 +386,144 @@
     height: 6px;
     border-radius: 6px;
     margin: 6px 0 14px;
+}
+
+/* Dark Theme Overrides for Dashboard */
+.theme-dark .dashboard-layout {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.theme-dark .top-header {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .top-header h1 {
+    color: #ffffff;
+}
+
+.theme-dark .header-date {
+    color: #9ca3af;
+}
+
+.theme-dark .header-sub {
+    color: #b0b0b0;
+}
+
+.theme-dark .avatar {
+    background: #3d3d3d;
+}
+
+.theme-dark .sidebar {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .user-profile h3,
+.theme-dark .user-profile h4 {
+    color: #ffffff;
+}
+
+.theme-dark .menu .nav-link {
+    color: #b0b0b0;
+}
+
+.theme-dark .menu .nav-link:hover {
+    background: #3d3d3d;
+    color: #ffffff;
+}
+
+.theme-dark .menu .nav-link.active {
+    background: #404040;
+    color: #ffffff;
+}
+
+.theme-dark .new-entry-btn {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .logout-btn {
+    background: #3d3d3d;
+    color: #ff4f7a;
+    border-color: #ff4f7a;
+}
+
+.theme-dark .logout-btn:hover {
+    background: #4d4d4d;
+}
+
+.theme-dark .version {
+    color: #888888;
+}
+
+.theme-dark .main-content {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.theme-dark .stat-card {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.theme-dark .stat-card .label {
+    color: #b0b0b0;
+}
+
+.theme-dark .stat-card h2 {
+    color: #ffffff;
+}
+
+.theme-dark .stat-card small {
+    color: #9ca3af;
+}
+
+.theme-dark .card {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.theme-dark .card h3 {
+    color: #ffffff;
+}
+
+.theme-dark .sub {
+    color: #9ca3af;
+}
+
+.theme-dark .line-chart {
+    background: #3d3d3d;
+    color: #e0e0e0;
+}
+
+.theme-dark .card-header h3 {
+    color: #ffffff;
+}
+
+.theme-dark .card-header h3 i {
+    color: #9ca3af;
+}
+
+.theme-dark .donut-label {
+    color: #9ca3af;
+}
+
+.theme-dark .legend-label {
+    color: #e0e0e0;
+}
+
+.theme-dark .legend-percentage {
+    color: #ffffff;
+}
+
+.theme-dark .no-data {
+    color: #9ca3af;
+}
+
+.theme-dark .tag {
+    color: #e0e0e0;
 }

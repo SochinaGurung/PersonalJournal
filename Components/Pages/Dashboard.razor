@@ -11,26 +11,41 @@
         <div class="user-profile">
             <!-- <img src="https://via.placeholder.com/48" alt="User" /> -->
             <div>
-                <h4>Hello, @UserName!</h4>
-                <span class="plan">Free Plan Member</span>
+                <h3>📖MyJournal </h3>
             </div>
         </div>
 
-        
-
         <nav class="menu">
-            <NavLink href="/dashboard" class="nav-link" Match="NavLinkMatch.All">Dashboard</NavLink>
-            <NavLink href="/calendar" class="nav-link">Calendar View</NavLink>
-            <NavLink href="/journal-list" class="nav-link">Journal List</NavLink>
-            <NavLink href="/settings" class="nav-link">Settings</NavLink>
+            <NavLink href="/dashboard" class="nav-link" Match="NavLinkMatch.All">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </NavLink>
+
+            <NavLink href="/journal" class="nav-link">
+                <i class="bi bi-plus-square"></i>
+                <span>New Entry</span>
+            </NavLink>
+
+            <NavLink href="/calendar" class="nav-link">
+                <i class="bi bi-calendar3"></i>
+                <span>Calendar</span>
+            </NavLink>
+
+            <NavLink href="/journal-list" class="nav-link">
+                <i class="bi bi-journal-text"></i>
+                <span>Journal List</span>
+            </NavLink>
+
+            <NavLink href="/settings" class="nav-link">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </NavLink>
         </nav>
-        <button class="new-entry-btn" @onclick="GoToJournal">
-            ＋ New Entry
-        </button>
+
         <button class="logout-btn" @onclick="Logout">
-            🚪 Logout
+            <i class="bi bi-box-arrow-right"></i> Logout
         </button>
-        <p class="version">v1.2.0 · Made with 💗</p>
+        <p class="version">Made with <i class="bi bi-heart-fill"></i></p>
     </aside>
 
     <!-- Main Content -->
@@ -38,31 +53,39 @@
 
         <!-- Header -->
         <header class="top-header">
-            <div>
-                <h1>My Journal Dashboard</h1>
-                <p>Your journaling insights at a glance 💗</p>
+            <div class="header-left">
+                <h2 class="header-sub">
+                    Good @(DateTime.Now.Hour < 12 ? "morning" : "evening"), @UserName. Ready for growth?
+                </h2>
+                <span class="header-date">
+                    @DateTime.Now.ToString("dddd, MMM dd").ToUpper()
+                </span>
             </div>
-            <span class="date">Today: @DateTime.Now.ToString("MMM dd, yyyy")</span>
+
+            <div class="avatar">
+                <img src="images/user.png" alt="User Avatar" />
+            </div>
         </header>
+
 
         <!-- Stats -->
         <section class="stats">
             <div class="stat-card">
-                <span class="icon">🔥</span>
+                <span class="icon"><i class="bi bi-fire"></i></span>
                 <p class="label">Streak</p>
                 <h2>@StreakDays Days</h2>
                 <small>@(StreakDays > 0 ? "You're on fire!" : "Start your streak!")</small>
             </div>
 
             <div class="stat-card">
-                <span class="icon">🏆</span>
+                <span class="icon"><i class="bi bi-trophy"></i></span>
                 <p class="label">Record</p>
                 <h2>@LongestStreak Days</h2>
                 <small>@(LongestStreak > 0 ? "Keep pushing!" : "Set your record!")</small>
             </div>
 
             <div class="stat-card">
-                <span class="icon">📝</span>
+                <span class="icon"><i class="bi bi-journal-text"></i></span>
                 <p class="label">Total Entries</p>
                 <h2>@TotalEntries</h2>
                 <small>@(TotalEntries > 0 ? "Great progress!" : "Start journaling!")</small>
@@ -72,35 +95,105 @@
         <!-- Analytics -->
         <section class="analytics">
             <div class="card">
-                <h3>Mood Distribution</h3>
-                <p class="sub">Last 30 Days</p>
+                <div class="card-header">
+                    <h3><i class="bi bi-pie-chart"></i> Mood Distribution</h3>
+                </div>
                 
-                @if (!string.IsNullOrEmpty(MostFrequentMood) && MostFrequentMood != "None")
+                @if (MoodDistribution.Count > 0)
                 {
-                    <div style="margin-bottom: 12px; padding: 8px; background: #f0f0f0; border-radius: 4px;">
-                        <strong>Most Frequent Mood:</strong> @MostFrequentMood @GetMoodEmoji(MostFrequentMood)
+                    var totalMoodEntries = MoodDistribution.Values.Sum();
+                    var sortedMoods = MoodDistribution.OrderByDescending(m => m.Value).ToList();
+                    var dominantMood = sortedMoods.First();
+                    
+                    <div class="mood-chart-container">
+                        <!-- Donut Chart -->
+                        <div class="donut-chart-wrapper">
+                            <svg class="donut-chart" viewBox="0 0 200 200">
+                                @{
+                                    double radius = 70;
+                                    double circumference = 2 * Math.PI * radius;
+                                    double accumulatedLength = 0;
+                                }
+                                @foreach (var mood in sortedMoods)
+                                {
+                                    var percentage = totalMoodEntries > 0 ? (mood.Value * 100.0 / totalMoodEntries) : 0;
+                                    var segmentLength = (percentage / 100.0) * circumference;
+                                    var gapLength = circumference - segmentLength;
+                                    var offset = circumference - accumulatedLength;
+                                    
+                                    <circle cx="100" cy="100" r="@radius.ToString("F0")" 
+                                            fill="none" 
+                                            stroke="@GetMoodColor(mood.Key)" 
+                                            stroke-width="40"
+                                            stroke-dasharray="@segmentLength.ToString("F2") @gapLength.ToString("F2")"
+                                            stroke-dashoffset="@offset.ToString("F2")"
+                                            transform="rotate(-90 100 100)"
+                                            class="donut-segment" />
+                                    
+                                    accumulatedLength += segmentLength;
+                                }
+                            </svg>
+                            <div class="donut-center">
+                                <div class="donut-emoji">@((MarkupString)GetMoodEmoji(dominantMood.Key))</div>
+                                <div class="donut-label">MOSTLY</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div class="mood-legend">
+                            @foreach (var mood in sortedMoods)
+                            {
+                                var percentage = totalMoodEntries > 0 ? (mood.Value * 100.0 / totalMoodEntries) : 0;
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background-color: @GetMoodColor(mood.Key);"></span>
+                                    <span class="legend-label">@GetMoodDisplayName(mood.Key)</span>
+                                    <span class="legend-percentage">@percentage.ToString("F0")%</span>
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
+                else
+                {
+                    <div class="no-data">
+                        <p>No mood data yet. Start journaling to see your mood distribution!</p>
+                    </div>
+                }
+            </div>
 
-                <!-- Placeholder for chart -->
-                <div class="donut">
-                    <span>Mostly @MostFrequentMood @GetMoodEmoji(MostFrequentMood)</span>
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="bi bi-star-fill"></i> Most Frequent Moods</h3>
+                    <p class="sub">Last 30 Days</p>
                 </div>
-
-                <ul class="legend">
-                    @foreach (var mood in MoodDistribution)
+                @if (MoodDistribution.Count > 0)
+                {
+                    var sortedMoods = MoodDistribution.OrderByDescending(m => m.Value).Take(5).ToList();
+                    var maxCount = sortedMoods.FirstOrDefault().Value;
+                    
+                    @foreach (var mood in sortedMoods)
                     {
-                        var percentage = TotalEntries > 0 ? (mood.Value * 100.0 / TotalEntries) : 0;
-                        <li>
-                            <span class="@GetMoodClass(mood.Key)"></span> 
-                            @mood.Key @percentage.ToString("F0")%
-                        </li>
+                        var percentage = maxCount > 0 ? (mood.Value * 100.0 / maxCount) : 0;
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>@((MarkupString)GetMoodEmojiSmall(mood.Key))</span>
+                                    <span style="font-weight: 500;">@GetMoodDisplayName(mood.Key)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.9rem; color: #666;">@mood.Value time@(mood.Value != 1 ? "s" : "")</span>
+                                </div>
+                            </div>
+                            <div class="bar" style="width: @(percentage)%; background: @GetMoodColor(mood.Key); height: 6px; border-radius: 3px;"></div>
+                        </div>
                     }
-                    @if (MoodDistribution.Count == 0)
-                    {
-                        <li>No mood data yet</li>
-                    }
-                </ul>
+                }
+                else
+                {
+                    <div class="no-data">
+                        <p>No mood data yet. Start journaling to see your most frequent moods!</p>
+                    </div>
+                }
             </div>
 
             <div class="card">
@@ -158,7 +251,7 @@
                         @foreach (var missedDay in MissedDays.Take(10))
                         {
                             <div style="padding: 4px; font-size: 12px; color: #666;">
-                                📅 @missedDay.ToString("MMM dd, yyyy")
+                                <i class="bi bi-calendar"></i> @missedDay.ToString("MMM dd, yyyy")
                             </div>
                         }
                         @if (MissedDays.Count > 10)
@@ -177,7 +270,7 @@
 
             <!-- Chart placeholder -->
             <div class="line-chart">
-                <span>📈 @TotalEntries entry@(TotalEntries != 1 ? "ies" : "") total</span>
+                <span><i class="bi bi-graph-up"></i> @TotalEntries entr@(TotalEntries != 1 ? "ies" : "") total</span>
             </div>
         </section>
 
@@ -224,6 +317,32 @@
         };
     }
 
+    private string GetMoodColor(string mood)
+    {
+        return mood.ToLower() switch
+        {
+            "positive" or "happy" => "#16a085", 
+            "neutral" => "#7c8db5",
+            "negative" => "#b8a9c9", 
+            "excited" => "#4cd964", 
+            "calm" => "#5a9cff", 
+            "tired" => "#b8a9c9", 
+            _ => "#ddd" 
+        };
+    }
+
+    private string GetMoodDisplayName(string mood)
+    {
+        return mood.ToLower() switch
+        {
+            "positive" => "Happy",
+            "neutral" => "Calm",
+            "negative" => "Tired",
+            "excited" => "Excited",
+            _ => mood
+        };
+    }
+
     private string GetTagColor(string tag)
     {
         var colors = new[] { "#ff4f7a", "#5a9cff", "#4cd964", "#9b5cff", "#ffc107" };
@@ -235,10 +354,23 @@
     {
         return mood.ToLower() switch
         {
-            "positive" => "😊",
-            "neutral" => "😐",
-            "negative" => "😔",
-            _ => "📝"
+            "positive" or "happy" => "<i class=\"bi bi-emoji-smile\" style=\"font-size: 2rem;\"></i>",
+            "neutral" or "calm" => "<i class=\"bi bi-emoji-neutral\" style=\"font-size: 2rem;\"></i>",
+            "negative" or "tired" => "<i class=\"bi bi-emoji-frown\" style=\"font-size: 2rem;\"></i>",
+            "excited" => "<i class=\"bi bi-emoji-smile\" style=\"font-size: 2rem;\"></i>",
+            _ => "<i class=\"bi bi-journal-text\" style=\"font-size: 2rem;\"></i>"
+        };
+    }
+    
+    private string GetMoodEmojiSmall(string mood)
+    {
+        return mood.ToLower() switch
+        {
+            "positive" or "happy" => "<i class=\"bi bi-emoji-smile\" style=\"font-size: 1.2rem;\"></i>",
+            "neutral" or "calm" => "<i class=\"bi bi-emoji-neutral\" style=\"font-size: 1.2rem;\"></i>",
+            "negative" or "tired" => "<i class=\"bi bi-emoji-frown\" style=\"font-size: 1.2rem;\"></i>",
+            "excited" => "<i class=\"bi bi-emoji-smile\" style=\"font-size: 1.2rem;\"></i>",
+            _ => "<i class=\"bi bi-journal-text\" style=\"font-size: 1.2rem;\"></i>"
         };
     }
    
