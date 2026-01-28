@@ -164,3 +164,87 @@
     color: #555;
     margin: 6px 0;
 }
+
+/* Dark Theme for Settings */
+.theme-dark .settings-page {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.theme-dark .page-header h1 {
+    color: #ffffff;
+}
+
+.theme-dark .back-dashboard-btn {
+    background: #3d3d3d;
+    border-color: #ff4f7a;
+    color: #ff4f7a;
+}
+
+.theme-dark .back-dashboard-btn:hover {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .settings-section {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.theme-dark .settings-section h2 {
+    color: #ffffff;
+}
+
+.theme-dark .setting-item label {
+    color: #b0b0b0;
+}
+
+.theme-dark .theme-btn {
+    background: #3d3d3d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .theme-btn.active {
+    background: #ff4f7a;
+    border-color: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .theme-btn:hover {
+    border-color: #ff4f7a;
+}
+
+.theme-dark .date-range label {
+    color: #b0b0b0;
+}
+
+.theme-dark .date-range input {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.theme-dark .export-btn {
+    background: #ff4f7a;
+    color: white;
+}
+
+.theme-dark .export-btn:hover {
+    background: #e63e6a;
+}
+
+.theme-dark .export-message.success {
+    background: #1e3a2e;
+    color: #4ade80;
+}
+
+.theme-dark .export-message.error {
+    background: #3a1e1e;
+    color: #f87171;
+}
+
+.theme-dark .settings-section p {
+    color: #b0b0b0;
+}
